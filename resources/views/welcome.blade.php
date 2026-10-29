@@ -391,11 +391,28 @@
             text-decoration: none;
             display: block;
             margin-bottom: 6px;
-            transition: color 0.15s ease;
+            transition: color 0.15s ease, transform 0.15s ease;
         }
 
         .footer-nav-link:hover {
             color: #000;
+            transform: translateX(3px);
+        }
+
+        .footer-social-link {
+            color: #4A473E;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(74, 71, 62, 0.4);
+            font-size: 0.82rem;
+            transition: all 0.15s ease;
+            display: inline-block;
+        }
+
+        .footer-social-link:hover {
+            color: var(--red-button);
+            text-decoration-color: var(--red-button);
+            transform: translateY(-1px);
         }
 
         /* Admin quick button float */
@@ -1452,6 +1469,7 @@
                         <a href="#about" class="footer-nav-link">About</a>
                         <a href="#education" class="footer-nav-link">Education & Skills</a>
                         <a href="#experience" class="footer-nav-link">Experience</a>
+                        <a href="#projects" class="footer-nav-link">Featured Projects</a>
                         <a href="#organization" class="footer-nav-link">Organisation</a>
                         <a href="#certifications" class="footer-nav-link">Certifications</a>
                         <a href="#courses" class="footer-nav-link">Course</a>
@@ -1464,11 +1482,84 @@
                     <h6 class="fw-bold mb-2 text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.05em; color: #2B2A27;">
                         DISPATCH & SOCIAL
                     </h6>
-                    <p class="fw-semibold mb-3" style="font-size: 0.82rem; color: #4A473E;">
-                        {{ $profile->dispatch_social ?? 'ReadCV • GitHub • LinkedIn • Substack' }}
-                    </p>
+                    @php
+                        $rawDispatch = $profile->dispatch_social ?? 'ReadCV • GitHub • LinkedIn • Substack';
+                        $tokens = preg_split('/[•|,]/u', $rawDispatch);
+                        $socialItems = [];
+
+                        foreach ($tokens as $token) {
+                            $item = trim($token);
+                            if (!$item) continue;
+
+                            $label = $item;
+                            $url = '#';
+
+                            // Format: "Name: https://..."
+                            if (str_contains($item, ':') && !str_starts_with($item, 'http')) {
+                                $parts = explode(':', $item, 2);
+                                $label = trim($parts[0]);
+                                $url = trim($parts[1]);
+                            } else {
+                                $lower = strtolower($item);
+                                if (str_contains($lower, 'readcv') || str_contains($lower, 'read.cv') || str_contains($lower, 'cv') || str_contains($lower, 'resume')) {
+                                    $url = ($profile->cv_file && $profile->cv_file !== '#') ? asset($profile->cv_file) : ($profile->linkedin_url ?? 'https://read.cv');
+                                } elseif (str_contains($lower, 'github')) {
+                                    $url = $profile->github_url ?? 'https://github.com/sherrynita';
+                                } elseif (str_contains($lower, 'linkedin')) {
+                                    $url = $profile->linkedin_url ?? 'https://linkedin.com/in/sherrynita';
+                                } elseif (str_contains($lower, 'substack')) {
+                                    $url = 'https://substack.com';
+                                } elseif (str_contains($lower, 'instagram')) {
+                                    $url = 'https://instagram.com';
+                                } elseif (str_contains($lower, 'twitter') || str_contains($lower, 'x.com')) {
+                                    $url = 'https://x.com';
+                                } elseif (filter_var($item, FILTER_VALIDATE_URL)) {
+                                    $url = $item;
+                                }
+                            }
+
+                            $socialItems[] = [
+                                'label' => $label,
+                                'url' => $url,
+                                'is_download' => (str_contains(strtolower($label), 'cv') && $profile->cv_file && $profile->cv_file !== '#')
+                            ];
+                        }
+                    @endphp
+
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        @foreach($socialItems as $idx => $si)
+                            @if($idx > 0)
+                                <span class="text-secondary" style="font-size: 0.72rem; opacity: 0.6;">•</span>
+                            @endif
+                            <a href="{{ $si['url'] }}" 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               class="footer-social-link fw-semibold"
+                               @if($si['is_download']) download @endif
+                               title="Kunjungi {{ $si['label'] }}">
+                                {{ $si['label'] }}
+                            </a>
+                        @endforeach
+                    </div>
+
+                    @php
+                        $officeNote = $profile->office_note ?? 'Office: studio@creativecraft.archive';
+                    @endphp
                     <p class="text-muted" style="font-size: 0.75rem;">
-                        {{ $profile->office_note ?? 'Office: studio@creativecraft.archive' }}
+                        @if(str_contains($officeNote, '@'))
+                            @php
+                                $words = explode(' ', $officeNote);
+                            @endphp
+                            @foreach($words as $w)
+                                @if(str_contains($w, '@'))
+                                    <a href="mailto:{{ trim($w, ':;,()') }}" class="footer-social-link text-muted" style="text-decoration: underline;">{{ $w }}</a>
+                                @else
+                                    {{ $w }}
+                                @endif
+                            @endforeach
+                        @else
+                            {{ $officeNote }}
+                        @endif
                     </p>
                 </div>
             </div>

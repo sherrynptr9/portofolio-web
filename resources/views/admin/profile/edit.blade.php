@@ -133,7 +133,8 @@
 
             <div class="col-md-6">
                 <label class="form-label fw-bold">Dispatch & Social Links</label>
-                <input type="text" name="dispatch_social" class="form-control" value="{{ old('dispatch_social', $profile->dispatch_social) }}">
+                <input type="text" name="dispatch_social" class="form-control" value="{{ old('dispatch_social', $profile->dispatch_social) }}" placeholder="ReadCV • GitHub • LinkedIn • Substack">
+                <small class="text-muted">Pisahkan dengan tanda peluru (•) atau koma. Tautan akan otomatis terhubung ke URL sosial/CV terkait.</small>
             </div>
 
             <div class="col-md-6">
