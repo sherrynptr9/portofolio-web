@@ -20,6 +20,7 @@
                     <th class="ps-4">Penyedia & Durasi</th>
                     <th>Judul Course / Bootcamp</th>
                     <th>Status Kelulusan</th>
+                    <th>Drive Link</th>
                     <th class="text-end pe-4">Aksi</th>
                 </tr>
             </thead>
@@ -39,6 +40,13 @@
                             {{ $c->status }}
                         </span>
                     </td>
+                    <td>
+                        @if($c->drive_link)
+                            <a href="{{ $c->drive_link }}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="fab fa-google-drive me-1"></i> Drive</a>
+                        @else
+                            <span class="text-muted small">-</span>
+                        @endif
+                    </td>
                     <td class="text-end pe-4">
                         <a href="{{ route('admin.course.edit', $c->id) }}" class="btn btn-sm btn-outline-primary me-1">
                             <i class="fas fa-edit"></i> Edit
@@ -54,7 +62,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" class="text-center py-4 text-muted">Belum ada data course.</td>
+                    <td colspan="5" class="text-center py-4 text-muted">Belum ada data course.</td>
                 </tr>
                 @endforelse
             </tbody>

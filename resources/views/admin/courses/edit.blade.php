@@ -46,6 +46,12 @@
                 <input type="text" name="status" class="form-control" value="{{ old('status', $course->status) }}" required>
             </div>
 
+            <div class="col-12">
+                <label class="form-label fw-bold">Link Google Drive (Sertifikat / Materi)</label>
+                <input type="url" name="drive_link" class="form-control" value="{{ old('drive_link', $course->drive_link) }}" placeholder="https://drive.google.com/...">
+                <small class="text-muted">Opsional. Link akan tampil di card dan modal detail.</small>
+            </div>
+
             <div class="col-12 mt-4">
                 <button type="submit" class="btn btn-primary px-4 fw-bold">Simpan Perubahan</button>
             </div>

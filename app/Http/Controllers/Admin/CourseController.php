@@ -27,6 +27,7 @@ class CourseController extends Controller
             'title' => 'required|string',
             'description' => 'required|string',
             'status' => 'required|string',
+            'drive_link' => 'nullable|url',
             'order' => 'nullable|integer',
         ]);
 
@@ -48,6 +49,7 @@ class CourseController extends Controller
             'title' => 'required|string',
             'description' => 'required|string',
             'status' => 'required|string',
+            'drive_link' => 'nullable|url',
             'order' => 'nullable|integer',
         ]);
 

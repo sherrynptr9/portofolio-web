@@ -645,6 +645,89 @@
         .project-item {
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
+
+        /* Courses Slider per 4 */
+        .courses-slider-outer {
+            overflow: hidden;
+            position: relative;
+            margin: 0 -8px;
+        }
+        .courses-slider-track {
+            display: flex;
+            transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+        .courses-slider-item {
+            flex: 0 0 25%;
+            max-width: 25%;
+            padding: 0 8px;
+            box-sizing: border-box;
+        }
+        @media (max-width: 991px) {
+            .courses-slider-item {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+        @media (max-width: 575px) {
+            .courses-slider-item {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+        .courses-nav-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #D8D1BD;
+            background: #FFFFFF;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #1F1F1E;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .courses-nav-btn:hover {
+            background: #1F1F1E;
+            color: #FFFFFF;
+            border-color: #1F1F1E;
+            transform: scale(1.05);
+        }
+        .courses-nav-btn:disabled {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        .courses-dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 16px;
+        }
+        .courses-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #D8D1BD;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+        .courses-dot.active {
+            width: 22px;
+            border-radius: 9999px;
+            background: #1F1F1E;
+        }
+        .course-card-trigger {
+            cursor: pointer;
+        }
+        .course-card-trigger:active {
+            transform: scale(0.99) !important;
+        }
     </style>
 </head>
 <body>
@@ -869,14 +952,14 @@
 
                             @if($fullstackGroup && $fullstackGroup->skills)
                                 <!-- 1. Frontend Development Dropdown -->
-                                <div class="skill-dropdown-header mt-3 mb-2" data-bs-toggle="collapse" data-bs-target="#frontendSkillsCollapse" aria-expanded="true" aria-controls="frontendSkillsCollapse">
+                                <div class="skill-dropdown-header mt-3 mb-2 collapsed" data-bs-toggle="collapse" data-bs-target="#frontendSkillsCollapse" aria-expanded="false" aria-controls="frontendSkillsCollapse">
                                     <div class="d-flex align-items-center gap-2">
                                         <i class="fas fa-chevron-down toggle-chevron text-muted" style="font-size: 10px;"></i>
                                         <span class="fw-bold" style="font-size: 11.5px;">Frontend Development</span>
                                     </div>
                                     <span class="badge bg-white text-dark border py-1 px-2" style="font-size: 9.5px; font-weight: 600;">6 Skills</span>
                                 </div>
-                                <div class="collapse show" id="frontendSkillsCollapse">
+                                <div class="collapse" id="frontendSkillsCollapse">
                                     <div class="mb-2">
                                         @foreach($fullstackGroup->skills->where('subgroup', 'Frontend Development') as $skill)
                                             <div class="skill-bar-row" data-percentage="{{ $skill->percentage }}">
@@ -889,14 +972,14 @@
                                 </div>
 
                                 <!-- 2. Backend Development Dropdown -->
-                                <div class="skill-dropdown-header mt-3 mb-2" data-bs-toggle="collapse" data-bs-target="#backendSkillsCollapse" aria-expanded="true" aria-controls="backendSkillsCollapse">
+                                <div class="skill-dropdown-header mt-3 mb-2 collapsed" data-bs-toggle="collapse" data-bs-target="#backendSkillsCollapse" aria-expanded="false" aria-controls="backendSkillsCollapse">
                                     <div class="d-flex align-items-center gap-2">
                                         <i class="fas fa-chevron-down toggle-chevron text-muted" style="font-size: 10px;"></i>
                                         <span class="fw-bold" style="font-size: 11.5px;">Backend Development</span>
                                     </div>
                                     <span class="badge bg-white text-dark border py-1 px-2" style="font-size: 9.5px; font-weight: 600;">6 Skills</span>
                                 </div>
-                                <div class="collapse show" id="backendSkillsCollapse">
+                                <div class="collapse" id="backendSkillsCollapse">
                                     <div class="mb-2">
                                         @foreach($fullstackGroup->skills->where('subgroup', 'Backend Development') as $skill)
                                             <div class="skill-bar-row" data-percentage="{{ $skill->percentage }}">
@@ -1223,7 +1306,7 @@
             <div class="d-flex align-items-end justify-content-between mb-4">
                 <div>
                     <div class="mono-tag">06 / VERIFIED CREDENTIALS</div>
-                    <h2 class="serif-title section-main-title">Honors & Certifications</h2>
+                    <h2 class="serif-title section-main-title">Certifications</h2>
                 </div>
                 <div class="d-none d-md-flex align-items-center gap-1 text-muted" style="font-size: 0.75rem;">
                     <i class="fas fa-shield-halved text-success"></i>
@@ -1300,44 +1383,61 @@
              07 / CONTINUED MASTERY: INTENSIVE COURSES & BOOTCAMPS
              ========================================== -->
         <section id="courses" class="pt-3 pb-5 reveal-on-scroll">
-            <div class="section-heading-wrap">
-                <div class="mono-tag">07 / CONTINUED MASTERY</div>
-                <h2 class="serif-title section-main-title">Intensive Courses & Bootcamps</h2>
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="section-heading-wrap mb-3" style="margin-bottom: 16px !important;">
+                    <div class="mono-tag">07 / CONTINUED MASTERY</div>
+                    <h2 class="serif-title section-main-title">Intensive Courses & Bootcamps</h2>
+                </div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <button type="button" class="courses-nav-btn" id="coursesPrevBtn" aria-label="Previous courses"><i class="fas fa-chevron-left"></i></button>
+                    <button type="button" class="courses-nav-btn" id="coursesNextBtn" aria-label="Next courses"><i class="fas fa-chevron-right"></i></button>
+                </div>
             </div>
 
-            <div class="row g-3 align-items-stretch">
-                @foreach($courses as $course)
-                    <div class="col-lg-3 col-md-6">
-                        <div class="folio-card folio-card-interactive p-4 h-100 d-flex flex-column justify-content-between">
-                            <div>
-                                <!-- Provider & Hours -->
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="fw-bold" style="font-size: 0.76rem; color: #2B4C7E;">{{ $course->provider }}</span>
-                                    <span class="badge bg-light text-secondary border" style="font-size: 0.68rem; font-weight: 600;">{{ $course->hours }}</span>
+            <div class="courses-slider-outer">
+                <div class="courses-slider-track" id="coursesSliderTrack">
+                    @foreach($courses as $course)
+                        <div class="courses-slider-item">
+                            <div class="folio-card folio-card-interactive course-card-trigger p-4 h-100 d-flex flex-column justify-content-between"
+                                 data-provider="{{ $course->provider }}"
+                                 data-hours="{{ $course->hours }}"
+                                 data-title="{{ $course->title }}"
+                                 data-desc="{{ $course->description }}"
+                                 data-status="{{ $course->status }}"
+                                 data-drive="{{ $course->drive_link ?? '' }}">
+                                <div>
+                                    <!-- Provider & Hours -->
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="fw-bold" style="font-size: 0.76rem; color: #2B4C7E;">{{ $course->provider }}</span>
+                                        <span class="badge bg-light text-secondary border" style="font-size: 0.68rem; font-weight: 600;">{{ $course->hours }}</span>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h5 class="serif-title fw-bold mb-2" style="font-size: 1.05rem; line-height: 1.35;">
+                                        {{ Str::limit($course->title, 50) }}
+                                    </h5>
+
+                                    <!-- Description -->
+                                    <p class="text-secondary mb-3" style="font-size: 0.74rem; line-height: 1.5; color: #55524B !important; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                        {{ $course->description }}
+                                    </p>
                                 </div>
 
-                                <!-- Title -->
-                                <h5 class="serif-title fw-bold mb-2" style="font-size: 1.05rem; line-height: 1.35;">
-                                    {{ $course->title }}
-                                </h5>
-
-                                <!-- Description -->
-                                <p class="text-secondary mb-3" style="font-size: 0.74rem; line-height: 1.5; color: #55524B !important;">
-                                    {{ $course->description }}
-                                </p>
-                            </div>
-
-                            <!-- Status -->
-                            <div class="pt-2 border-top">
-                                <span class="fw-semibold" style="font-size: 0.72rem; color: #2E7D32;">
-                                    <i class="fas fa-check-circle me-1" style="font-size: 11px;"></i>
-                                    {{ $course->status }}
-                                </span>
+                                <div class="d-flex align-items-center justify-content-between pt-2 border-top gap-2">
+                                    <span class="fw-semibold" style="font-size: 0.72rem; color: #2E7D32;">
+                                        <i class="fas fa-check-circle me-1" style="font-size: 11px;"></i>
+                                        {{ Str::limit($course->status, 22) }}
+                                    </span>
+                                    <span class="d-inline-flex align-items-center gap-1" style="font-size: 0.7rem; font-weight: 600; color: #1F1F1E;">
+                                        Detail <i class="fas fa-arrow-up-right-from-square" style="font-size: 9px;"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
+            <div class="courses-dots" id="coursesDots"></div>
         </section>
 
 
@@ -1605,6 +1705,51 @@
                     <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal" style="font-size: 13px;">Tutup</button>
                     <a id="modalProjectLink" href="#" target="_blank" class="btn btn-touch px-4 d-inline-flex align-items-center gap-2" style="font-size: 13px;">
                         <span>Buka Link Project</span>
+                        <i class="fas fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Detail Modal (slide per 4) -->
+    <div class="modal fade" id="courseDetailModal" tabindex="-1" aria-labelledby="modalCourseTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg" style="background-color: #FFFDF7; border: 1px solid #E8E2D0; border-radius: 14px; overflow: hidden;">
+                <div class="modal-header border-bottom py-3 px-4" style="background-color: #FFF9E7;">
+                    <div class="d-flex flex-column gap-1">
+                        <div class="d-flex align-items-center gap-2">
+                            <span id="modalCourseProvider" class="fw-bold" style="font-size: 0.8rem; color: #2B4C7E;"></span>
+                            <span id="modalCourseHours" class="badge bg-light text-secondary border" style="font-size: 0.68rem;"></span>
+                        </div>
+                        <h5 class="modal-title serif-title fw-bold mb-0" id="modalCourseTitle" style="font-size: 1.2rem; line-height: 1.3;"></h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <h6 class="mono-tag mb-2" style="font-size: 11px;">DESCRIPTION & SYLLABUS</h6>
+                    <p id="modalCourseDesc" class="text-secondary mb-4" style="font-size: 0.86rem; line-height: 1.65; color: #4A473E !important; white-space: pre-line;"></p>
+
+                    <h6 class="mono-tag mb-2" style="font-size: 11px;">COMPLETION STATUS</h6>
+                    <div class="d-flex align-items-center gap-2 mb-4">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10 border border-success" style="width: 22px; height: 22px;"><i class="fas fa-check" style="font-size: 10px; color: #2E7D32;"></i></span>
+                        <span id="modalCourseStatus" class="fw-semibold" style="font-size: 0.8rem; color: #2E7D32;"></span>
+                    </div>
+
+                    <div id="modalCourseDriveWrap" class="d-none">
+                        <h6 class="mono-tag mb-2" style="font-size: 11px;">CERTIFICATE / MATERIALS</h6>
+                        <a id="modalCourseDriveLink" href="#" target="_blank" class="btn btn-sm d-inline-flex align-items-center gap-2 px-3 py-2"
+                           style="background:#FFFFFF; border:1px solid #D8D1BD; border-radius: 8px; font-size: 12px; font-weight: 600; color: #1F1F1E; text-decoration: none;">
+                            <i class="fab fa-google-drive" style="color:#2B4C7E;"></i>
+                            <span>Buka di Google Drive</span>
+                            <i class="fas fa-arrow-up-right-from-square" style="font-size: 10px;"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="modal-footer border-top py-3 px-4 d-flex justify-content-between align-items-center" style="background-color: #FFF9E7;">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal" style="font-size: 13px;">Tutup</button>
+                    <a id="modalCourseDriveLinkFooter" href="#" target="_blank" class="btn btn-touch px-4 d-none align-items-center gap-2" style="font-size: 13px;">
+                        <span><i class="fab fa-google-drive me-1"></i> Lihat di Drive</span>
                         <i class="fas fa-arrow-up-right-from-square"></i>
                     </a>
                 </div>
@@ -1886,6 +2031,157 @@
             if (modalEl && typeof bootstrap !== 'undefined') {
                 previewModal = new bootstrap.Modal(modalEl);
             }
+
+            // -------------------------------------------------------------
+            // 7b. Courses Slider per 4 + Detail Popup + Drive Link
+            // -------------------------------------------------------------
+            const coursesTrack = document.getElementById('coursesSliderTrack');
+            const coursesPrevBtn = document.getElementById('coursesPrevBtn');
+            const coursesNextBtn = document.getElementById('coursesNextBtn');
+            const coursesDotsWrap = document.getElementById('coursesDots');
+            const courseCards = coursesTrack ? coursesTrack.querySelectorAll('.courses-slider-item') : [];
+            let coursesCurrentPage = 0;
+
+            function getCoursesPerView() {
+                if (window.innerWidth <= 575) return 1;
+                if (window.innerWidth <= 991) return 2;
+                return 4;
+            }
+
+            function getCoursesTotalPages() {
+                const perView = getCoursesPerView();
+                return Math.max(1, Math.ceil(courseCards.length / perView));
+            }
+
+            function renderCoursesSlider() {
+                if (!coursesTrack || courseCards.length === 0) return;
+                const perView = getCoursesPerView();
+                const totalPages = getCoursesTotalPages();
+                if (coursesCurrentPage >= totalPages) coursesCurrentPage = totalPages - 1;
+                if (coursesCurrentPage < 0) coursesCurrentPage = 0;
+
+                // slide per perView: translate = page * (outerWidth)
+                const outer = coursesTrack.parentElement;
+                const outerW = outer ? outer.offsetWidth : 0;
+                if (outerW > 0) {
+                    coursesTrack.style.transform = 'translateX(-' + (coursesCurrentPage * outerW) + 'px)';
+                } else {
+                    coursesTrack.style.transform = 'translateX(-' + (coursesCurrentPage * 100) + '%)';
+                }
+
+                if (coursesPrevBtn) coursesPrevBtn.disabled = coursesCurrentPage === 0;
+                if (coursesNextBtn) coursesNextBtn.disabled = coursesCurrentPage >= totalPages - 1;
+
+                if (coursesDotsWrap) {
+                    coursesDotsWrap.innerHTML = '';
+                    for (let i = 0; i < totalPages; i++) {
+                        const dot = document.createElement('button');
+                        dot.type = 'button';
+                        dot.className = 'courses-dot' + (i === coursesCurrentPage ? ' active' : '');
+                        dot.setAttribute('aria-label', 'Page ' + (i + 1));
+                        dot.addEventListener('click', () => {
+                            coursesCurrentPage = i;
+                            renderCoursesSlider();
+                        });
+                        coursesDotsWrap.appendChild(dot);
+                    }
+                    coursesDotsWrap.style.display = totalPages <= 1 ? 'none' : 'flex';
+                }
+
+                // Hide nav if single page
+                if (coursesPrevBtn && coursesNextBtn) {
+                    const hideNav = totalPages <= 1;
+                    coursesPrevBtn.style.display = hideNav ? 'none' : 'inline-flex';
+                    coursesNextBtn.style.display = hideNav ? 'none' : 'inline-flex';
+                }
+            }
+
+            if (coursesPrevBtn) {
+                coursesPrevBtn.addEventListener('click', () => {
+                    coursesCurrentPage = Math.max(0, coursesCurrentPage - 1);
+                    renderCoursesSlider();
+                });
+            }
+            if (coursesNextBtn) {
+                coursesNextBtn.addEventListener('click', () => {
+                    coursesCurrentPage = Math.min(getCoursesTotalPages() - 1, coursesCurrentPage + 1);
+                    renderCoursesSlider();
+                });
+            }
+
+            window.addEventListener('resize', renderCoursesSlider);
+            renderCoursesSlider();
+
+            // Swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+            if (coursesTrack) {
+                coursesTrack.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+                coursesTrack.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    const diff = touchStartX - touchEndX;
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) {
+                            coursesCurrentPage = Math.min(getCoursesTotalPages() - 1, coursesCurrentPage + 1);
+                        } else {
+                            coursesCurrentPage = Math.max(0, coursesCurrentPage - 1);
+                        }
+                        renderCoursesSlider();
+                    }
+                }, { passive: true });
+            }
+
+            // Course detail popup
+            const courseModalEl = document.getElementById('courseDetailModal');
+            let courseModal = null;
+            if (courseModalEl && typeof bootstrap !== 'undefined') {
+                courseModal = new bootstrap.Modal(courseModalEl);
+            }
+            document.querySelectorAll('.course-card-trigger').forEach(card => {
+                card.addEventListener('click', function () {
+                    const provider = this.getAttribute('data-provider') || '';
+                    const hours = this.getAttribute('data-hours') || '';
+                    const title = this.getAttribute('data-title') || '';
+                    const desc = this.getAttribute('data-desc') || '';
+                    const status = this.getAttribute('data-status') || '';
+                    const drive = this.getAttribute('data-drive') || '';
+
+                    const pEl = document.getElementById('modalCourseProvider');
+                    const hEl = document.getElementById('modalCourseHours');
+                    const tEl = document.getElementById('modalCourseTitle');
+                    const dEl = document.getElementById('modalCourseDesc');
+                    const sEl = document.getElementById('modalCourseStatus');
+                    const driveWrap = document.getElementById('modalCourseDriveWrap');
+                    const driveLink = document.getElementById('modalCourseDriveLink');
+                    const driveLinkFooter = document.getElementById('modalCourseDriveLinkFooter');
+
+                    if (pEl) pEl.textContent = provider;
+                    if (hEl) hEl.textContent = hours;
+                    if (tEl) tEl.textContent = title;
+                    if (dEl) dEl.textContent = desc;
+                    if (sEl) sEl.textContent = status;
+
+                    if (drive && drive !== '') {
+                        if (driveWrap) driveWrap.classList.remove('d-none');
+                        if (driveLink) { driveLink.href = drive; }
+                        if (driveLinkFooter) {
+                            driveLinkFooter.href = drive;
+                            driveLinkFooter.classList.remove('d-none');
+                            driveLinkFooter.classList.add('d-inline-flex');
+                        }
+                    } else {
+                        if (driveWrap) driveWrap.classList.add('d-none');
+                        if (driveLinkFooter) {
+                            driveLinkFooter.classList.add('d-none');
+                            driveLinkFooter.classList.remove('d-inline-flex');
+                        }
+                    }
+
+                    if (courseModal) courseModal.show();
+                });
+            });
 
             document.querySelectorAll('.project-thumb-wrap, .project-title-hover').forEach(trigger => {
                 trigger.addEventListener('click', function () {
