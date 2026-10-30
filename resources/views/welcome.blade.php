@@ -1451,21 +1451,7 @@
             </div>
 
             <div class="row g-3">
-                <!-- Phone -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="folio-card folio-card-interactive copyable-card p-3 p-md-4 h-100" data-copy="{{ $profile->phone ?? '+62 812-3456-7890' }}" title="Klik untuk salin nomor telepon">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <div class="d-flex align-items-center gap-2">
-                                <i class="fas fa-phone-alt text-success" style="font-size: 14px;"></i>
-                                <span class="mono-tag" style="font-size: 10px;">NOMOR TELEPON</span>
-                            </div>
-                            <span class="badge bg-light text-muted border copy-badge"><i class="fa-regular fa-copy me-1"></i>Salin</span>
-                        </div>
-                        <h6 class="fw-bold mb-1" style="font-size: 0.95rem;">{{ $profile->phone ?? '+62 812-3456-7890' }}</h6>
-                        <p class="text-muted mb-0" style="font-size: 0.74rem;">{{ $profile->phone_note ?? 'Available via WhatsApp & Call' }}</p>
-                    </div>
-                </div>
-
+                
                 <!-- Email -->
                 <div class="col-lg-4 col-md-6">
                     <div class="folio-card folio-card-interactive copyable-card p-3 p-md-4 h-100" data-copy="{{ $profile->email ?? 'sherrynitamarsya@gmail.com' }}" title="Klik untuk salin alamat email">
@@ -1478,18 +1464,6 @@
                         </div>
                         <h6 class="fw-bold mb-1" style="font-size: 0.95rem;">{{ $profile->email ?? 'sherrynitamarsya@gmail.com' }}</h6>
                         <p class="text-muted mb-0" style="font-size: 0.74rem;">{{ $profile->email_note ?? 'Send direct message' }}</p>
-                    </div>
-                </div>
-
-                <!-- Location -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="folio-card folio-card-interactive p-3 p-md-4 h-100">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class="fas fa-location-dot text-danger" style="font-size: 14px;"></i>
-                            <span class="mono-tag" style="font-size: 10px;">ALAMAT / LOCATION</span>
-                        </div>
-                        <h6 class="fw-bold mb-1" style="font-size: 0.95rem;">{{ $profile->location ?? 'Kec. Beji, Kota Depok' }}</h6>
-                        <p class="text-muted mb-0" style="font-size: 0.74rem;">{{ $profile->location_note ?? 'Jawa Barat, Indonesia (Open to WFH / Onsite)' }}</p>
                     </div>
                 </div>
 
@@ -1525,21 +1499,6 @@
                             <p class="text-muted mb-0" style="font-size: 0.74rem;">Explore code repositories &rarr;</p>
                         </div>
                     </a>
-                </div>
-
-                <!-- Response Time -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="folio-card folio-card-interactive p-3 p-md-4 h-100">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class="fas fa-clock text-warning" style="font-size: 14px;"></i>
-                            <span class="mono-tag" style="font-size: 10px;">RESPONSE TIME</span>
-                        </div>
-                        <h6 class="fw-bold mb-1" style="font-size: 0.95rem;">{{ $profile->response_time ?? '< 24 Hours' }}</h6>
-                        <p class="text-success fw-semibold mb-0" style="font-size: 0.74rem;">
-                            <span class="d-inline-block rounded-circle bg-success me-1" style="width: 7px; height: 7px;"></span>
-                            {{ $profile->response_note ?? 'Actively accepting new projects' }}
-                        </p>
-                    </div>
                 </div>
             </div>
         </section>
